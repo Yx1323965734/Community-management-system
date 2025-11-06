@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh">
+<!-- 不体现到页面中 -->
+<head>
+    <meta charset="UTF-8">   <!-- 使用UTF-8编码-->
+    <title>Login</title>
+    <!-- 包含所有的 CSS 样式规则。 -->
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px;
+            /* 给右边的“眼睛图标”预留空间 */
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #5b9bd5;
+            outline: none;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            fill: #888;
+            transition: fill 0.3s;
+        }
+
+        .toggle-password:hover {
+            fill: #5b9bd5;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #5b9bd5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #4a8ac3;
+        }
+
+        .error-message {
+            margin-top: 10px;
+            color: red;
+            font-size: 0.85em;
+            display: none;
+        }
+    </style>
+</head>
+
+<!-- 直接表现在页面上的 -->
+<body>
+    <!-- 使用一个中心化的 <div> 容器（.login-box）来放置所有登录相关的元素，包括标题、用户名输入框、密码输入框（带有显示/隐藏密码的图标）、登录按钮以及错误提示信息。 -->
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username"> <!--最后一个用于提示用户应该输入什么类型的数据-->
+
+        <div class="input-wrapper">
+            <input type="password" id="password" placeholder="Password">
+            <!-- 切换密码的明文和密文形式-->
+            <svg class="toggle-password" id="togglePassword" onclick="togglePassword()" viewBox="0 0 24 24"> <!--togglePassword()函数用于切换形式-->
+                <!-- 用于构造眼睛图形 -->
+                <path
+                    d="M12 4.5C7 4.5 2.73 8.11 1 12c1.73 3.89 6 7.5 11 7.5s9.27-3.61 11-7.5c-1.73-3.89-6-7.5-11-7.5zm0 13a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0-2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+            </svg>
+        </div>
+
+        <button onclick="login()">Login</button>
+        <!--用login()联动JavaScript获得用户和密码-->
+        <div class="error-message" id="errorMsg">Incorrect username or password</div>
+    </div>
+    
+    <script>
+        let isPasswordVisible = false;
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePassword');
+
+            if (isPasswordVisible) {
+                passwordInput.type = 'password';
+                toggleIcon.innerHTML = `
+          <path d="M12 4.5C7 4.5 2.73 8.11 1 12c1.73 3.89 6 7.5 11 7.5s9.27-3.61 11-7.5c-1.73-3.89-6-7.5-11-7.5zm0 13a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0-2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+        `;
+            } else {
+                passwordInput.type = 'text';
+                toggleIcon.innerHTML = `
+          <path d="M12 6a9.77 9.77 0 0 1 8.94 6A9.77 9.77 0 0 1 12 18a9.77 9.77 0 0 1-8.94-6A9.77 9.77 0 0 1 12 6m0-1.5C7 4.5 2.73 8.11 1 12c1.15 2.59 3.22 4.91 6 6.41L3 22l1.41 1.41 18-18L21 3l-4.41 4.41C16.45 7.14 14.27 6 12 6z"/>
+        `;
+            }
+
+            isPasswordVisible = !isPasswordVisible;
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            // 固定的账号密码，可以更改后续的账号和密码
+            const correctUsername = "202301033116";
+            const correctPassword = "18870013173";
+
+            if (username === correctUsername && password === correctPassword) {
+                alert("Login successful!");
+                errorMsg.style.display = "none";
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>
