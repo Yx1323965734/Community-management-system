@@ -541,3 +541,38 @@ footer {
         height: 10px;
     }
 }
+
+.notice-date, .arrangement-date {
+    font-size: 0.8em;
+    color: #666;
+    display: block;
+    margin-top: 2px;
+}
+
+.record-status {
+    font-size: 0.8em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+.record-status.completed {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+}
+
+.record-status.in-progress {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+.hot-news-item {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.hot-news-item:last-child {
+    border-bottom: none;
+}

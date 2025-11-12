@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}修改信息 - 社区公共收益管理系统{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* 继承自 pub.html 的通用表单样式 */
+    .edit-wrapper {
+        margin: 20px 0;
+    }
+
+    .edit-box {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+
+    .edit-box h2 {
+        font-size: 24px;
+        color: #1e5799;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .form-group input[type="text"], 
+    .form-group input[type="date"], 
+    .form-group select, 
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        font-family: inherit;
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+        border-color: #1e5799;
+        outline: none;
+        box-shadow: 0 0 5px rgba(32, 124, 202, 0.3);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 150px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: flex-end; /* 按钮靠右对齐 */
+        gap: 15px;
+        padding-top: 10px;
+    }
+
+    .action-btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .save-btn {
+        background: #1e5799;
+        color: white;
+    }
+
+    .save-btn:hover {
+        background: #16437e;
+    }
+    
+    .cancel-btn {
+        background: #ccc;
+        color: #333;
+    }
+
+    .cancel-btn:hover {
+        background: #bbb;
+    }
+</style>
+
+<script>
+    // 方案C：用于设置当前日期，尽管在编辑界面通常会显示旧值
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('date');
+        
+        // 如果后端没有提供一个值，则默认设置为今天的日期
+        if (!dateInput.value) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            
+            dateInput.value = `${year}-${month}-${day}`;
+        }
+        
+        // 添加取消按钮的点击事件
+        const cancelBtn = document.getElementById('cancel-edit');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // 示例：返回上一页或详情页
+                window.history.back(); 
+            });
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <h2>修改信息详情</h2>
+</div>
+
+<div class="edit-wrapper">
+    <div class="edit-box">
+        <h2>编辑公告: 社区公共收益第一季度公示报告</h2>
+        <form action="/update_publication/{{ item_id }}" method="post">
+            {# 假设后端会传递一个包含待编辑数据的 item 字典 #}
+            {# 示例：item.id = 1, item.title = '社区公共收益第一季度公示报告发布' #}
+            
+            <input type="hidden" name="id" value="1"> <div class="form-group">
+                <label for="title">标题:</label>
+                <input type="text" id="title" name="title" 
+                       value="{{ item.title or '社区公共收益第一季度公示报告发布' }}" 
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">信息类型:</label>
+                <select id="category" name="category" required>
+                    {# 使用 Jinja2 的 'selected' 属性来显示当前值 #}
+                    <option value="news" {% if item.category == 'news' %}selected{% endif %}>新闻动态</option>
+                    <option value="notice" {% if item.category == 'notice' %}selected{% endif %}>维护通知</option>
+                    <option value="report" {% if item.category == 'report' or True %}selected{% endif %}>收益报告</option>
+                    <option value="project" {% if item.category == 'project' %}selected{% endif %}>项目申报</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="author">发布者:</label>
+                <input type="text" id="author" name="author" 
+                       value="{{ item.author or '社区管委会' }}" 
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">发布日期:</label>
+                <input type="date" id="date" name="date" 
+                       value="{{ item.date or '2023-04-15' }}" 
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="summary">摘要 (可选):</label>
+                <input type="text" id="summary" name="summary" 
+                       value="{{ item.summary or '本季度社区公共收益主要来源于停车场收费、公共区域广告和社区活动场地租赁等...' }}"
+                       placeholder="请输入简短摘要...">
+            </div>
+
+            <div class="form-group">
+                <label for="content">正文内容:</label>
+                <textarea id="content" name="content" required>
+                    {# 在 textarea 中，值直接放在标签中间 #}
+{{ item.content or '尊敬的社区居民：为确保社区公共收益的透明化管理，社区管委会特此发布《社区公共收益第一季度公示报告》。本报告涵盖了2023年1月1日至2023年3月31日期间的全部收入与支出情况。...' }}
+                </textarea>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" id="cancel-edit" class="action-btn cancel-btn">取消</button>
+                <button type="submit" class="action-btn save-btn">保存修改</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

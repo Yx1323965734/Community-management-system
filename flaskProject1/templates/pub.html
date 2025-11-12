@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}信息发布 - 社区公共收益管理系统{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* 发布页面特有的样式 */
+    .pub-wrapper {
+        margin: 20px 0;
+    }
+
+    .pub-box {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+
+    .pub-box h2 {
+        font-size: 24px;
+        color: #1e5799;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .form-group input[type="text"], 
+    .form-group input[type="date"], 
+    .form-group select, 
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        font-family: inherit;
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+        border-color: #1e5799;
+        outline: none;
+        box-shadow: 0 0 5px rgba(32, 124, 202, 0.3);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 150px;
+    }
+
+    .submit-btn {
+        padding: 12px 25px;
+        background: #1e5799;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+        float: right; /* 让按钮靠右 */
+    }
+
+    .submit-btn:hover {
+        background: #16437e;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <h2>发布新信息</h2>
+</div>
+
+<div class="pub-wrapper">
+    <div class="pub-box">
+        <h2>发布新闻 / 项目公告</h2>
+        <form action="/submit_publication" method="post">
+            
+            <div class="form-group">
+                <label for="title">标题:</label>
+                <input type="text" id="title" name="title" placeholder="请输入信息标题" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">信息类型:</label>
+                <select id="category" name="category" required>
+                    <option value="">-- 请选择 --</option>
+                    <option value="news">新闻动态</option>
+                    <option value="notice">维护通知</option>
+                    <option value="report">收益报告</option>
+                    <option value="project">项目申报</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="author">发布者:</label>
+                <input type="text" id="author" name="author" value="社区管委会" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">发布日期:</label>
+                <input type="date" id="date" name="date" value="{{ today }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="summary">摘要 (可选):</label>
+                <input type="text" id="summary" name="summary" placeholder="请输入简短摘要...">
+            </div>
+
+            <div class="form-group">
+                <label for="content">正文内容:</label>
+                <textarea id="content" name="content" placeholder="请输入详细内容..." required></textarea>
+            </div>
+            
+            <div style="overflow: auto;">
+                <button type="submit" class="submit-btn">确认发布</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{# <input type="date" id="date" name="date" value="{{ 'now' | date('Y-m-d') }}" required>#}

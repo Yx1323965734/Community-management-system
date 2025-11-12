@@ -1,11 +1,80 @@
-<html lang="en">
-
+<!DOCTYPE html>
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}社区公共收益管理系统{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head_extra %}{% endblock %}
 </head>
 
+<body>
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/js.js') }}"></script>
+    {% endblock %}
 
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🏠</div>
+                <h1>社区公共收益管理系统</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">首页</a></li>
+                    <li><a href="/login">登录</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>关于我们</h3>
+                <ul class="footer-links">
+                    <li><a href="#">系统介绍</a></li>
+                    <li><a href="#">管理团队</a></li>
+                    <li><a href="#">联系我们</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>收益管理</h3>
+                <ul class="footer-links">
+                    <li><a href="#">收益公示</a></li>
+                    <li><a href="#">使用记录</a></li>
+                    <li><a href="#">项目申报</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>政策法规</h3>
+                <ul class="footer-links">
+                    <li><a href="#">管理办法</a></li>
+                    <li><a href="#">使用条例</a></li>
+                    <li><a href="#">相关法规</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>帮助中心</h3>
+                <ul class="footer-links">
+                    <li><a href="#">使用指南</a></li>
+                    <li><a href="#">常见问题</a></li>
+                    <li><a href="#">意见反馈</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>© 2023 社区公共收益管理系统 版权所有</p>
+        </div>
+    </footer>
+
+</body>
 </html>

@@ -1,231 +1,195 @@
+{% extends "base.html" %}
 
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>社区公共收益管理系统 - 新闻中心</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></link>
+{% block title %}新闻中心 - 社区公共收益管理系统{% endblock %}
 
-</head>
-
-
-<body>
-    {#    {% extends "base.html" %}#}
-
-    <script src="{{ url_for('static', filename='js/js.js') }}"></script>
-
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🏠</div>
-                <h1>社区公共收益管理系统</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#">首页</a></li>
-                    <li><a href="#">登录</a></li>
-
-                    <li><a href="#" class="active">新闻动态</a></li>
-                </ul>
-            </nav>
+{% block content %}
+    <div class="page-title">
+        <h2>新闻动态</h2>
+        <div class="search-box">
+            <input type="text" placeholder="搜索新闻...">
+            <button>搜索</button>
         </div>
-    </header>
-
-    <div class="container">
-        <div class="page-title">
-            <h2>新闻动态</h2>
-            <div class="search-box">
-                <input type="text" placeholder="搜索新闻...">
-                <button>搜索</button>
-            </div>
-        </div>
-
-        <div class="carousel-wrapper">
-            <div class="carousel-container">
-            <div class="carousel-slides">
-                <div class="slide active">
-                    <img src="https://picsum.photos/800/400?random=1" alt="图片1">
-                    <div class="caption">美丽风景1</div>
-                </div>
-                <div class="slide">
-                    <img src="https://picsum.photos/800/400?random=2" alt="图片2">
-                    <div class="caption">壮丽山河2</div>
-                </div>
-                <div class="slide">
-                    <img src="https://picsum.photos/800/400?random=3" alt="图片3">
-                    <div class="caption">自然风光3</div>
-                </div>
-                <div class="slide">
-                    <img src="https://picsum.photos/800/400?random=4" alt="图片4">
-                    <div class="caption">城市夜景4</div>
-                </div>
-            </div>
-
-            <!-- 导航按钮 -->
-            <button class="carousel-btn prev-btn">&#10094;</button>
-            <button class="carousel-btn next-btn">&#10095;</button>
-
-            <!-- 指示器 -->
-            <div class="carousel-indicators">
-                <span class="indicator active" data-index="0"></span>
-                <span class="indicator" data-index="1"></span>
-                <span class="indicator" data-index="2"></span>
-                <span class="indicator" data-index="3"></span>
-            </div>
-        </div>
-        </div>
-
-        <div class="news-container">
-            <div class="news-list">
-                <div class="news-item">
-                    <h3 class="news-title"><a href="#">社区公共收益第一季度公示报告发布</a></h3>
-                    <div class="news-meta">
-                        <span class="news-date">2023-04-15</span>
-                        <span class="news-author">发布者：社区管委会</span>
-                    </div>
-                    <p class="news-summary">本季度社区公共收益主要来源于停车场收费、公共区域广告和社区活动场地租赁等，总收入达到28.5万元，同比增长15%。详细收支情况已公示于社区公告栏...</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
-                </div>
-                
-                <div class="news-item">
-                    <h3 class="news-title"><a href="#">社区公共设施升级改造项目启动</a></h3>
-                    <div class="news-meta">
-                        <span class="news-date">2023-04-10</span>
-                        <span class="news-author">发布者：社区管委会</span>
-                    </div>
-                    <p class="news-summary">经居民代表大会决议，将使用部分公共收益对社区儿童游乐场和健身区域进行升级改造。项目预计投资15万元，计划于5月初开工，6月底完工...</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
-                </div>
-                
-                <div class="news-item">
-                    <h3 class="news-title"><a href="#">关于规范社区公共收益使用的通知</a></h3>
-                    <div class="news-meta">
-                        <span class="news-date">2023-04-05</span>
-                        <span class="news-author">发布者：社区管委会</span>
-                    </div>
-                    <p class="news-summary">为进一步规范社区公共收益的使用和管理，确保资金使用公开透明，社区管委会制定了《社区公共收益使用管理办法》，现予以公布...</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
-                </div>
-                
-                <div class="news-item">
-                    <h3 class="news-title"><a href="#">社区公共收益管理系统上线公告</a></h3>
-                    <div class="news-meta">
-                        <span class="news-date">2023-03-28</span>
-                        <span class="news-author">发布者：系统管理员</span>
-                    </div>
-                    <p class="news-summary">为提高社区公共收益管理的透明度和效率，社区公共收益管理系统正式上线。居民可通过系统查看收益明细、项目申报进度和公示公告等信息...</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
-                </div>
-                
-                <div class="news-item">
-                    <h3 class="news-title"><a href="#">2022年度社区公共收益使用情况报告</a></h3>
-                    <div class="news-meta">
-                        <span class="news-date">2023-03-15</span>
-                        <span class="news-author">发布者：社区管委会</span>
-                    </div>
-                    <p class="news-summary">2022年度社区公共收益总收入为98.7万元，主要支出包括公共区域维护、社区文化活动、困难家庭帮扶和公共设施添置等。详细报告已公示...</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
-                </div>
-            </div>
-            
-            <div class="news-sidebar">
-                <div class="sidebar-box">
-                    <h3 class="sidebar-title">热门新闻</h3>
-                    <ul class="hot-news-list">
-                        <li class="hot-news-item"><a href="#">社区公共收益第一季度公示报告发布</a></li>
-                        <li class="hot-news-item"><a href="#">社区公共设施升级改造项目启动</a></li>
-                        <li class="hot-news-item"><a href="#">关于规范社区公共收益使用的通知</a></li>
-                        <li class="hot-news-item"><a href="#">2022年度社区公共收益使用情况报告</a></li>
-                        <li class="hot-news-item"><a href="#">社区公共收益管理系统上线公告</a></li>
-                    </ul>
-                </div>
-                
-                <div class="sidebar-box">
-                    <h3 class="sidebar-title">新闻分类</h3>
-                    <ul class="category-list">
-                        <li class="category-item">
-                            <a href="#">收益公示 <span class="category-count">12</span></a>
-                        </li>
-                        <li class="category-item">
-                            <a href="#">项目申报 <span class="category-count">8</span></a>
-                        </li>
-                        <li class="category-item">
-                            <a href="#">政策法规 <span class="category-count">5</span></a>
-                        </li>
-                        <li class="category-item">
-                            <a href="#">社区活动 <span class="category-count">15</span></a>
-                        </li>
-                        <li class="category-item">
-                            <a href="#">系统公告 <span class="category-count">7</span></a>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="sidebar-box">
-                    <h3 class="sidebar-title">联系我们</h3>
-                    <p>如有疑问或建议，请联系社区管委会：</p>
-                    <p>📞 电话：028-87654321</p>
-                    <p>📧 邮箱：community@example.com</p>
-                    <p>📍 地址：社区服务中心二楼管委会办公室</p>
-                </div>
-            </div>
-        </div>
-
-        <ul class="pagination">
-            <li><a href="#" class="active">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">下一页</a></li>
-        </ul>
-
-
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-column">
-                <h3>关于我们</h3>
-                <ul class="footer-links">
-                    <li><a href="#">系统介绍</a></li>
-                    <li><a href="#">管理团队</a></li>
-                    <li><a href="#">联系我们</a></li>
+    <div class="carousel-wrapper">
+        <div class="carousel-container">
+        <div class="carousel-slides">
+            <div class="slide active">
+                <img src="https://picsum.photos/800/400?random=1" alt="图片1">
+                <div class="caption">美丽风景1</div>
+            </div>
+            <div class="slide">
+                <img src="https://picsum.photos/800/400?random=2" alt="图片2">
+                <div class="caption">壮丽山河2</div>
+            </div>
+            <div class="slide">
+                <img src="https://picsum.photos/800/400?random=3" alt="图片3">
+                <div class="caption">自然风光3</div>
+            </div>
+            <div class="slide">
+                <img src="https://picsum.photos/800/400?random=4" alt="图片4">
+                <div class="caption">城市夜景4</div>
+            </div>
+        </div>
+
+        <button class="carousel-btn prev-btn">&#10094;</button>
+        <button class="carousel-btn next-btn">&#10095;</button>
+
+        <div class="carousel-indicators">
+            <span class="indicator active" data-index="0"></span>
+            <span class="indicator" data-index="1"></span>
+            <span class="indicator" data-index="2"></span>
+            <span class="indicator" data-index="3"></span>
+        </div>
+    </div>
+    </div>
+
+    <div class="news-container">
+        <div class="news-list">
+            <div class="news-item">
+                <h3 class="news-title"><a href="#">社区公共收益第一季度公示报告发布</a></h3>
+                <div class="news-meta">
+                    <span class="news-date">2023-04-15</span>
+                    <span class="news-author">发布者：社区管委会</span>
+                </div>
+                <p class="news-summary">本季度社区公共收益主要来源于停车场收费、公共区域广告和社区活动场地租赁等，总收入达到28.5万元，同比增长15%。详细收支情况已公示于社区公告栏...</p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </div>
+
+            <div class="news-item">
+                <h3 class="news-title"><a href="#">社区公共设施升级改造项目启动</a></h3>
+                <div class="news-meta">
+                    <span class="news-date">2023-04-10</span>
+                    <span class="news-author">发布者：社区管委会</span>
+                </div>
+                <p class="news-summary">经居民代表大会决议，将使用部分公共收益对社区儿童游乐场和健身区域进行升级改造。项目预计投资15万元，计划于5月初开工，6月底完工...</p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </div>
+
+            <div class="news-item">
+                <h3 class="news-title"><a href="#">关于规范社区公共收益使用的通知</a></h3>
+                <div class="news-meta">
+                    <span class="news-date">2023-04-05</span>
+                    <span class="news-author">发布者：社区管委会</span>
+                </div>
+                <p class="news-summary">为进一步规范社区公共收益的使用和管理，确保资金使用公开透明，社区管委会制定了《社区公共收益使用管理办法》，现予以公布...</p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </div>
+
+            <div class="news-item">
+                <h3 class="news-title"><a href="#">社区公共收益管理系统上线公告</a></h3>
+                <div class="news-meta">
+                    <span class="news-date">2023-03-28</span>
+                    <span class="news-author">发布者：系统管理员</span>
+                </div>
+                <p class="news-summary">为提高社区公共收益管理的透明度和效率，社区公共收益管理系统正式上线。居民可通过系统查看收益明细、项目申报进度和公示公告等信息...</p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </div>
+
+            <div class="news-item">
+                <h3 class="news-title"><a href="#">2022年度社区公共收益使用情况报告</a></h3>
+                <div class="news-meta">
+                    <span class="news-date">2023-03-15</span>
+                    <span class="news-author">发布者：社区管委会</span>
+                </div>
+                <p class="news-summary">2022年度社区公共收益总收入为98.7万元，主要支出包括公共区域维护、社区文化活动、困难家庭帮扶和公共设施添置等。详细报告已公示...</p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </div>
+        </div>
+
+        <div class="news-sidebar">
+            <div class="sidebar-box">
+                <h3 class="sidebar-title">维护通知</h3>
+                <ul class="hot-news-list">
+                    <li class="hot-news-item">
+                        <a href="#">电梯定期维护通知 (5月15日-16日)</a>
+                        <span class="notice-date">2023-05-10</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">供水系统检修通知 (5月20日)</a>
+                        <span class="notice-date">2023-05-08</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">社区网络设备升级维护</a>
+                        <span class="notice-date">2023-05-05</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">停车场监控系统维护</a>
+                        <span class="notice-date">2023-05-03</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">公共区域照明系统检修</a>
+                        <span class="notice-date">2023-05-01</span>
+                    </li>
                 </ul>
             </div>
-            
-            <div class="footer-column">
-                <h3>收益管理</h3>
-                <ul class="footer-links">
-                    <li><a href="#">收益公示</a></li>
-                    <li><a href="#">使用记录</a></li>
-                    <li><a href="#">项目申报</a></li>
+
+            <div class="sidebar-box">
+                <h3 class="sidebar-title">维修记录</h3>
+                <ul class="hot-news-list">
+                    <li class="hot-news-item">
+                        <a href="#">3号楼电梯故障已修复</a>
+                        <span class="record-status completed">已完成</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">儿童游乐场设施维修</a>
+                        <span class="record-status completed">已完成</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">地下车库照明维修</a>
+                        <span class="record-status in-progress">进行中</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">小区大门门禁系统维修</a>
+                        <span class="record-status completed">已完成</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">健身器材维护记录</a>
+                        <span class="record-status completed">已完成</span>
+                    </li>
                 </ul>
             </div>
-            
-            <div class="footer-column">
-                <h3>政策法规</h3>
-                <ul class="footer-links">
-                    <li><a href="#">管理办法</a></li>
-                    <li><a href="#">使用条例</a></li>
-                    <li><a href="#">相关法规</a></li>
+
+            <div class="sidebar-box">
+                <h3 class="sidebar-title">安全提醒</h3>
+                <ul class="hot-news-list">
+                    <li class="hot-news-item"><a href="#">夏季用电安全注意事项</a></li>
+                    <li class="hot-news-item"><a href="#">台风季节防范措施提醒</a></li>
+                    <li class="hot-news-item"><a href="#">防火防盗安全提示</a></li>
+                    <li class="hot-news-item"><a href="#">儿童暑期安全注意事项</a></li>
+                    <li class="hot-news-item"><a href="#">电动车充电安全规范</a></li>
                 </ul>
             </div>
-            
-            <div class="footer-column">
-                <h3>帮助中心</h3>
-                <ul class="footer-links">
-                    <li><a href="#">使用指南</a></li>
-                    <li><a href="#">常见问题</a></li>
-                    <li><a href="#">意见反馈</a></li>
+
+            <div class="sidebar-box">
+                <h3 class="sidebar-title">维修人员安排</h3>
+                <ul class="hot-news-list">
+                    <li class="hot-news-item">
+                        <a href="#">5月份维修人员值班表</a>
+                        <span class="arrangement-date">2023-05-01</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">端午节期间维修服务安排</a>
+                        <span class="arrangement-date">2023-06-20</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">夏季高温期间工作安排</a>
+                        <span class="arrangement-date">2023-07-01</span>
+                    </li>
+                    <li class="hot-news-item">
+                        <a href="#">夜间紧急维修联系方式</a>
+                        <span class="arrangement-date">2023-05-15</span>
+                    </li>
                 </ul>
             </div>
         </div>
-        
-        <div class="copyright">
-            <p>© 2023 社区公共收益管理系统 版权所有</p>
-        </div>
-    </footer>
+    </div>
 
-
-</body>
-</html>
+    <ul class="pagination">
+        <li><a href="#" class="active">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">下一页</a></li>
+    </ul>
+{% endblock %}
