@@ -1,3 +1,11 @@
-SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:root@127.0.0.1:3306/community_management_system?charset=utf8mb4'
+
+MYSQL_HOST = 'localhost'
+MYSQL_PORT = 3306
+MYSQL_USER = 'root'
+MYSQL_PASSWORD = 'root'
+MYSQL_DATABASE = 'community_management_system'
+
+SQLALCHEMY_DATABASE_URI = f'mysql+mysqldb://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}?charset=utf8mb4'
+
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
