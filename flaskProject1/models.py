@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import Integer, String, Text, DateTime, Date, Numeric, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import Optional
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # --- 数据库模型定义 ---
 
@@ -13,10 +13,14 @@ class User(db.Model):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
-    # 密码哈希值
+    # **注意：存储的是密码哈希值**
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[str] = mapped_column(String(50), default='viewer')
     email: Mapped[Optional[str]] = mapped_column(String(120), unique=True, nullable=True)
+
+    # 帮助方法：检查密码
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class PublicInfo(db.Model):
@@ -58,6 +62,17 @@ class PublicRevenue(db.Model):
     party: Mapped[Optional[str]] = mapped_column(String(150), nullable=True)
     # 外键关联到 PublicInfo
     report_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('public_info.id'), nullable=True)
+
+class Carousel(db.Model):
+    __tablename__ = 'carousel'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    title: Mapped[str] = mapped_column(String(100), nullable=True)     # 图片标题(可选)
+    image_url: Mapped[str] = mapped_column(String(255), nullable=False) # 图片链接(必填)
+    target_link: Mapped[str] = mapped_column(String(255), nullable=True) # 点击后跳转的链接
+    priority: Mapped[int] = mapped_column(Integer, default=0)          # 排序优先级(数字越大越靠前)
+    is_active: Mapped[bool] = mapped_column(default=True)              # 是否启用
+    create_time: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+
 
 # 为了让 Flask-Migrate 发现所有模型，它们需要在这个文件被导入。
 # ----------------------------------------------------------------------

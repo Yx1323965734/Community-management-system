@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}意见反馈 - 社区公共收益管理系统{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* 直接复用 detail.html 的布局样式，保持风格统一 */
+    .detail-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .detail-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+
+    .news-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .sidebar-box {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        padding: 20px;
+    }
+    
+    .hot-news-list { list-style: none; padding: 0; }
+    .hot-news-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #eee; }
+    .hot-news-item a { text-decoration: none; color: #333; transition: 0.3s; }
+    .hot-news-item a:hover { color: #1e5799; }
+
+    /* 表单特有样式 */
+    .feedback-form { margin-top: 30px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box; /* 极其重要，防止宽度溢出 */
+    }
+    .submit-btn {
+        background: #1e5799;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .submit-btn:hover { background: #16437e; }
+    
+    .contact-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+        border-left: 4px solid #1e5799;
+    }
+
+    @media (max-width: 992px) {
+        .detail-container { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <h2>意见反馈与联系</h2>
+</div>
+
+<div class="detail-container">
+    <div class="detail-content">
+        <h1 style="color: #1e5799; margin-bottom: 20px;">欢迎您的建议</h1>
+        
+        <div class="article-body">
+            <p>尊敬的居民朋友：</p>
+            <p>为了更好地服务社区，提高公共收益管理的透明度，我们非常重视您的意见和建议。如果您对本系统的使用、财务公示数据或社区设施维护有任何疑问，欢迎通过以下方式联系我们。</p>
+            
+            <div class="contact-info">
+                <h3>📞 联系方式</h3>
+                <ul style="list-style: none; padding-left: 0; margin-top: 10px; line-height: 2;">
+                    <li><strong>办公地点：</strong> 社区党群服务中心 203 室</li>
+                    <li><strong>办公电话：</strong> 0XX-12345678 (工作日 9:00-17:00)</li>
+                    <li><strong>电子邮箱：</strong> contact@community.com</li>
+                    <li><strong>紧急报修：</strong> 138-XXXX-XXXX (24小时)</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <h3>📝 在线留言</h3>
+            <p style="font-size: 14px; color: #666;">您也可以直接在下方填写表单，我们会尽快通过邮件回复您。</p>
+            
+            <form action="#" method="post" class="feedback-form" onsubmit="alert('感谢您的反馈！目前仅为演示界面。'); return false;">
+                <div class="form-group">
+                    <label>您的姓名 (可选):</label>
+                    <input type="text" class="form-control" placeholder="请输入姓名">
+                </div>
+                <div class="form-group">
+                    <label>联系电话/邮箱 (必填):</label>
+                    <input type="text" class="form-control" required placeholder="方便我们需要时联系您">
+                </div>
+                <div class="form-group">
+                    <label>反馈类型:</label>
+                    <select class="form-control">
+                        <option>收益公示疑问</option>
+                        <option>设施报修</option>
+                        <option>投诉建议</option>
+                        <option>其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>详细内容:</label>
+                    <textarea class="form-control" rows="5" required placeholder="请详细描述您的问题..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">提交反馈</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="news-sidebar">
+        <div class="sidebar-box">
+            <h3 class="sidebar-title">最新动态</h3>
+            <ul class="hot-news-list">
+                {% for news in sidebar_list %}
+                    <li class="hot-news-item">
+                        <a href="{{ url_for('detail', item_id=news.id) }}">{{ news.title }}</a>
+                        <span style="font-size: 12px; color: #999; display: block; margin-top: 2px;">
+                            {{ news.publish_date.strftime('%Y-%m-%d') }}
+                        </span>
+                    </li>
+                {% else %}
+                    <li class="hot-news-item">暂无相关信息</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

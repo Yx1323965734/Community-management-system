@@ -22,7 +22,15 @@
             <nav>
                 <ul>
                     <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">首页</a></li>
-                    <li><a href="/login">登录</a></li>
+
+                    {# 如果用户已登录，显示“管理后台”和“退出” #}
+                    {% if session.get('user_id') %}
+                        <li><a href="{{ url_for('admin.dashboard') }}">管理后台</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+                    {% else %}
+                        {# 如果未登录，显示“管理员登录” #}
+                        <li><a href="{{ url_for('auth.login') }}">管理员登录</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
@@ -66,7 +74,7 @@
                 <ul class="footer-links">
                     <li><a href="#">使用指南</a></li>
                     <li><a href="#">常见问题</a></li>
-                    <li><a href="#">意见反馈</a></li>
+                    <li><a href="{{ url_for('feedback') }}">意见反馈</a></li>
                 </ul>
             </div>
         </div>

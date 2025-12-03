@@ -132,7 +132,7 @@
 <div class="edit-wrapper">
     <div class="edit-box">
         <h2>编辑公告: 社区公共收益第一季度公示报告</h2>
-        <form action="/update_publication/{{ item_id }}" method="post">
+        <form action="{{ url_for('admin.edit', item_id=item_id) }}" method="post">
             {# 假设后端会传递一个包含待编辑数据的 item 字典 #}
             {# 示例：item.id = 1, item.title = '社区公共收益第一季度公示报告发布' #}
             

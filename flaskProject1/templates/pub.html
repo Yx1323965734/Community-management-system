@@ -88,7 +88,7 @@
 <div class="pub-wrapper">
     <div class="pub-box">
         <h2>发布新闻 / 项目公告</h2>
-        <form action="/submit_publication" method="post">
+        <form action="{{ url_for('admin.publish') }}" method="post">
             
             <div class="form-group">
                 <label for="title">标题:</label>

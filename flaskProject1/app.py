@@ -1,84 +1,138 @@
 # app.py
 
-from flask import Flask, render_template
-from datetime import datetime
+from flask import Flask, render_template, redirect, url_for, flash, request
 import config
-# 从 exts.py 导入未绑定应用的 db 和 migrate 实例
 from exts import db, migrate
-# 确保导入 models.py，以便 migrate 发现所有模型
-import models
+from models import PublicInfo
+# 导入两个蓝图
+from blueprint.auth import auth_bp
+from blueprint.admin import admin_bp  # <--- 新增导入
+from models import PublicInfo, MaintenanceRecord # 记得在文件顶部导入 MaintenanceRecord
+from models import PublicInfo, MaintenanceRecord, Carousel
 
 
-# --- 应用工厂函数 (强制使用工厂模式以支持 Flask-Migrate) ---
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
 
-    # 1. 绑定 SQLAlchemy 实例到 app
     db.init_app(app)
-
-    # 2. 初始化 Flask-Migrate
-    # 必须传入 db 实例和 app 实例
     migrate.init_app(app, db)
 
-    # --- 路由注册 ---
+    # 注册蓝图
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)  # <--- 注册 Admin 蓝图
+
+    # --- 公共路由 ---
 
     @app.route("/")
     def news():
-        # ... (路由代码保持不变) ...
-        return render_template("news.html")
+        # 1. 获取当前页码，默认为第 1 页
+        page = request.args.get('page', 1, type=int)
+        per_page = 5
+        # 2. 构建主列表查询语句
+        stmt_all = db.select(PublicInfo).order_by(PublicInfo.publish_date.desc())
+
+        # 3. 执行分页查询 (Flask-SQLAlchemy 3.0+ 语法)
+        # 这会返回一个 pagination 对象，包含 .items (当前页数据), .pages (总页数) 等信息
+        stmt_all = db.select(PublicInfo).order_by(PublicInfo.publish_date.desc())
+        pagination = db.paginate(stmt_all, page=page, per_page=per_page, error_out=False)
+
+        # --- 侧边栏查询保持不变 ---
+        # 侧边栏 - 维护通知
+        stmt_notice = db.select(PublicInfo).where(PublicInfo.category == 'notice').order_by(
+            PublicInfo.publish_date.desc()).limit(5)
+        notices = db.session.execute(stmt_notice).scalars().all()
+
+        # 侧边栏 - 安全提醒
+        stmt_safety = db.select(PublicInfo).where(PublicInfo.category == 'safety').order_by(
+            PublicInfo.publish_date.desc()).limit(5)
+        safeties = db.session.execute(stmt_safety).scalars().all()
+
+        # 侧边栏 - 维修记录
+        stmt_record = db.select(MaintenanceRecord).order_by(MaintenanceRecord.start_date.desc()).limit(5)
+        records = db.session.execute(stmt_record).scalars().all()
+
+        stmt_carousel = db.select(Carousel).where(Carousel.is_active == True).order_by(Carousel.priority.desc(),Carousel.create_time.desc())
+        carousel_list = db.session.execute(stmt_carousel).scalars().all()
+
+
+
+        # 注意：这里传给模板的是 pagination 对象，而不是原来的 news_list
+        return render_template("news.html",
+                               pagination=pagination,
+                               notices=notices,
+                               safeties=safeties,
+                               records=records,
+                               carousel_list=carousel_list)
 
     @app.route("/login")
-    def login():
-        # ...
-        return render_template("login.html")
+    def login_redirect():
+        return redirect(url_for('auth.login'))
 
-    @app.route('/static')
+    @app.route('/static-demo')  # 改个名避免冲突，或者直接删除
     def static_demo():
-        # ...
         return render_template("static.html")
 
-    @app.route('/pub')
-    def pub():
-        # ...
-        return render_template("pub.html", today=datetime.now().strftime('%Y-%m-%d'))
+    # app.py
 
+    # ... 之前的代码 ...
+
+    # 新增：维修记录详情页路由
+    @app.route('/maintenance/<int:record_id>')
+    def maintenance_detail(record_id):
+        # 使用 SQLAlchemy 获取记录
+        # 记得确保 MaintenanceRecord 已经在文件顶部导入
+        record = db.session.get(MaintenanceRecord, record_id)
+
+        if not record:
+            flash('未找到该维修记录', 'danger')
+            return redirect(url_for('news'))
+
+        return render_template("maintenance_detail.html", record=record)
+
+    # ... 之后的代码 ...
+
+    # 详情页依然对所有人可见
     @app.route('/detail/<int:item_id>')
-    @app.route('/detail')
-    def detail(item_id=1):
-        # ...
-        mock_item = {
-            'id': item_id,
-            'title': '社区公共收益第一季度公示报告发布',
-            'author': '社区管委会',
-            'publish_date': '2023-04-15',
-            'views_count': 1258,
-        }
-        return render_template("detail.html", item=mock_item)
+    def detail(item_id):
+        # 1. 获取当前文章详情
+        item = db.session.get(PublicInfo, item_id)
 
-    @app.route('/edit/<int:item_id>')
-    @app.route('/edit')
-    def edit(item_id=1):
-        # ...
-        mock_item = {
-            'id': item_id,
-            'title': '社区公共收益第一季度公示报告发布 (待修改)',
-            'category': 'report',
-            'author': '社区管委会',
-            'date': '2023-04-15',
-            'summary': '本季度社区公共收益主要来源于停车场收费、公共区域广告和社区活动场地租赁等...',
-            'content': '尊敬的社区居民：为确保社区公共收益的透明化管理，社区管委会特此发布《社区公共收益第一季度公示报告》。本报告涵盖了2023年1月1日至2023年3月31日期间的全部收入与支出情况。详细财务明细已同步公示于社区公告栏及本系统的**收益公示**板块...',
-        }
-        return render_template("edit.html", item_id=item_id, item=mock_item)
+        if not item:
+            flash('未找到该文章', 'danger')
+            return redirect(url_for('news'))
+
+        # 2. 增加浏览量
+        item.views_count += 1
+        db.session.commit()
+
+        # 3. 【新增】查询侧边栏数据 (相关链接)
+        # 逻辑：查询 PublicInfo 表，排除当前这篇文章 (id != item_id)，按时间倒序，取前 5 条
+        stmt_sidebar = db.select(PublicInfo).where(PublicInfo.id != item_id).order_by(
+            PublicInfo.publish_date.desc()).limit(5)
+        sidebar_list = db.session.execute(stmt_sidebar).scalars().all()
+
+        # 4. 将 sidebar_list 传递给模板
+        return render_template("detail.html", item=item, sidebar_list=sidebar_list)
+    # --- 【注意】 ---
+    # 旧的 /pub, /submit_publication, /edit, /update_publication
+    # 已经被移除了！现在这些功能都在 /admin 蓝图下管理。
+
+    @app.route('/feedback')
+    def feedback():
+        # 1. 为了保持页面右侧不空，依然查询最新的5条动态作为侧边栏
+        stmt_sidebar = db.select(PublicInfo).order_by(PublicInfo.publish_date.desc()).limit(5)
+        sidebar_list = db.session.execute(stmt_sidebar).scalars().all()
+
+        # 2. 渲染专门的反馈模板
+        return render_template("feedback.html", sidebar_list=sidebar_list)
+
 
     return app
 
 
-# --- 运行部分 ---
 
-# 实例化应用
 app = create_app()
 
 if __name__ == '__main__':
-    # 移除 db.create_all()
     app.run(debug=True)

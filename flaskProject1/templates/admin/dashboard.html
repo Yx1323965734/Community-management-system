@@ -1,0 +1,127 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}{{ page_title }} - 管理后台{% endblock %}
+
+{% block content %}
+<div class="page-title" style="margin-top: 0; border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 20px;">
+    <h2>{{ page_title }}</h2>
+
+    {% if not is_maintenance %}
+        <div class="actions">
+            <a href="{{ url_for('admin.publish', category=current_category) }}"
+               style="background: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;">
+               + 发布{{ page_title }}
+            </a>
+        </div>
+    {% else %}
+
+        <a href="{{ url_for('admin.maintenance_add') }}"
+           style="background: #1e5799; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;">
+           + 登记维修记录
+        </a>
+    {% endif %}
+</div>
+
+<div class="search-bar-container" style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #ddd;">
+    <form action="" method="get" style="display: flex; gap: 10px; align-items: center;">
+
+        {% if not is_maintenance and not current_category and request.endpoint == 'admin.dashboard' %}
+            <select name="category" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="">-- 所有分类 --</option>
+                <option value="news" {% if current_category == 'news' %}selected{% endif %}>新闻动态</option>
+                <option value="notice" {% if current_category == 'notice' %}selected{% endif %}>维护通知</option>
+                <option value="report" {% if current_category == 'report' %}selected{% endif %}>收益报告</option>
+                <option value="safety" {% if current_category == 'safety' %}selected{% endif %}>安全提醒</option>
+                <option value="project" {% if current_category == 'project' %}selected{% endif %}>项目申报</option>
+            </select>
+        {% endif %}
+
+        <input type="text" name="keyword" value="{{ current_keyword or '' }}"
+               placeholder="{% if is_maintenance %}搜索设施名称或标题...{% else %}搜索标题关键字...{% endif %}"
+               style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 250px;">
+
+        <button type="submit" style="padding: 8px 15px; background-color: #1e5799; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            🔍 搜索
+        </button>
+
+        {% if current_keyword or (request.endpoint == 'admin.dashboard' and current_category) %}
+            <a href="{{ request.path }}" style="color: #666; text-decoration: none; font-size: 14px; margin-left: 10px;">
+                ↺ 重置
+            </a>
+        {% endif %}
+    </form>
+</div>
+
+{% if is_maintenance %}
+    <table class="admin-table" style="width: 100%; border-collapse: collapse; background: white;">
+        <thead>
+            <tr style="background: #f8f9fa;">
+                <th style="padding:10px; border:1px solid #ddd;">ID</th>
+                <th style="padding:10px; border:1px solid #ddd;">设施名称</th>
+                <th style="padding:10px; border:1px solid #ddd;">类型</th>
+                <th style="padding:10px; border:1px solid #ddd;">开始时间</th>
+                <th style="padding:10px; border:1px solid #ddd;">负责人/公司</th>
+                <th style="padding:10px; border:1px solid #ddd;">状态</th>
+                <th style="padding:10px; border:1px solid #ddd; width: 150px;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in maintenance_list %}
+            <tr>
+                <td style="padding:10px; border:1px solid #ddd;">{{ record.id }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ record.facility }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ record.record_type }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ record.start_date.strftime('%Y-%m-%d') }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ record.responsible_person }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">
+                    {% if record.status == 'completed' %}
+                        <span style="color:green">已完成</span>
+                    {% else %}
+                        <span style="color:orange">进行中</span>
+                    {% endif %}
+                </td>
+
+                <td style="padding:10px; border:1px solid #ddd;">
+                    <a href="{{ url_for('admin.maintenance_edit', record_id=record.id) }}" style="color: #e67e22; text-decoration: none; margin-right: 8px;">编辑</a>
+                    <a href="{{ url_for('admin.maintenance_delete', record_id=record.id) }}" onclick="return confirm('确定要删除这条记录吗？')" style="color: #dc3545; text-decoration: none;">删除</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="padding:20px; text-align:center;">暂无维修记录</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+    <table class="admin-table" style="width: 100%; border-collapse: collapse; background: white;">
+        <thead>
+            <tr style="background: #f8f9fa;">
+                <th style="padding:10px; border:1px solid #ddd;">ID</th>
+                <th style="padding:10px; border:1px solid #ddd;">标题</th>
+                <th style="padding:10px; border:1px solid #ddd;">分类</th>
+                <th style="padding:10px; border:1px solid #ddd;">发布日期</th>
+                <th style="padding:10px; border:1px solid #ddd;">浏览</th>
+                <th style="padding:10px; border:1px solid #ddd;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in info_list %}
+            <tr>
+                <td style="padding:10px; border:1px solid #ddd;">{{ item.id }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ item.title }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ item.category }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ item.publish_date.strftime('%Y-%m-%d') }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">{{ item.views_count }}</td>
+                <td style="padding:10px; border:1px solid #ddd;">
+                    <a href="{{ url_for('admin.edit', item_id=item.id) }}" style="color: #e67e22; text-decoration: none;">编辑</a>
+                    <a href="{{ url_for('admin.delete', item_id=item.id) }}" onclick="return confirm('确定删除？')" style="color:#dc3545; margin-left:10px; text-decoration: none;">删除</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="padding:20px; text-align:center;">暂无数据</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% endblock %}

@@ -13,183 +13,145 @@
 
     <div class="carousel-wrapper">
         <div class="carousel-container">
-        <div class="carousel-slides">
-            <div class="slide active">
-                <img src="https://picsum.photos/800/400?random=1" alt="图片1">
-                <div class="caption">美丽风景1</div>
+            <div class="carousel-slides">
+                {% for slide in carousel_list %}
+                    <div class="slide {% if loop.index0 == 0 %}active{% endif %}">
+                        <img src="{{ slide.image_url }}" alt="{{ slide.title }}">
+
+                        {% if slide.title %}
+                        <div class="caption">
+                            {% if slide.target_link %}
+                                <a href="{{ slide.target_link }}" style="color:white; text-decoration:none;">{{ slide.title }}</a>
+                            {% else %}
+                                {{ slide.title }}
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="slide active">
+                        <img src="https://picsum.photos/800/400?random=99" alt="默认图片">
+                        <div class="caption">欢迎访问社区管理系统</div>
+                    </div>
+                {% endfor %}
             </div>
-            <div class="slide">
-                <img src="https://picsum.photos/800/400?random=2" alt="图片2">
-                <div class="caption">壮丽山河2</div>
-            </div>
-            <div class="slide">
-                <img src="https://picsum.photos/800/400?random=3" alt="图片3">
-                <div class="caption">自然风光3</div>
-            </div>
-            <div class="slide">
-                <img src="https://picsum.photos/800/400?random=4" alt="图片4">
-                <div class="caption">城市夜景4</div>
+
+            <button class="carousel-btn prev-btn">&#10094;</button>
+            <button class="carousel-btn next-btn">&#10095;</button>
+
+            <div class="carousel-indicators">
+                {% for slide in carousel_list %}
+                    <span class="indicator {% if loop.index0 == 0 %}active{% endif %}" data-index="{{ loop.index0 }}"></span>
+                {% else %}
+                     <span class="indicator active" data-index="0"></span>
+                {% endfor %}
             </div>
         </div>
-
-        <button class="carousel-btn prev-btn">&#10094;</button>
-        <button class="carousel-btn next-btn">&#10095;</button>
-
-        <div class="carousel-indicators">
-            <span class="indicator active" data-index="0"></span>
-            <span class="indicator" data-index="1"></span>
-            <span class="indicator" data-index="2"></span>
-            <span class="indicator" data-index="3"></span>
-        </div>
-    </div>
     </div>
 
     <div class="news-container">
         <div class="news-list">
-            <div class="news-item">
-                <h3 class="news-title"><a href="#">社区公共收益第一季度公示报告发布</a></h3>
-                <div class="news-meta">
-                    <span class="news-date">2023-04-15</span>
-                    <span class="news-author">发布者：社区管委会</span>
-                </div>
-                <p class="news-summary">本季度社区公共收益主要来源于停车场收费、公共区域广告和社区活动场地租赁等，总收入达到28.5万元，同比增长15%。详细收支情况已公示于社区公告栏...</p>
-                <a href="#" class="read-more">阅读全文 →</a>
-            </div>
+            {% for item in pagination.items %}
+                <div class="news-item">
+                    <h3 class="news-title">
+                        <a href="{{ url_for('detail', item_id=item.id) }}">{{ item.title }}</a>
+                    </h3>
+                    <div class="news-meta">
+                        <span class="news-date">{{ item.publish_date.strftime('%Y-%m-%d') }}</span>
+                        <span class="news-author">发布者：{{ item.author }}</span>
+                        <span class="news-category">[{{ item.category }}]</span>
+                    </div>
+                    <p class="news-summary">
+                        {{ item.summary or item.content[:100] + '...' }}
+                    </p>
+                    <a href="{{ url_for('detail', item_id=item.id) }}" class="read-more">阅读全文 →</a>
 
-            <div class="news-item">
-                <h3 class="news-title"><a href="#">社区公共设施升级改造项目启动</a></h3>
-                <div class="news-meta">
-                    <span class="news-date">2023-04-10</span>
-                    <span class="news-author">发布者：社区管委会</span>
                 </div>
-                <p class="news-summary">经居民代表大会决议，将使用部分公共收益对社区儿童游乐场和健身区域进行升级改造。项目预计投资15万元，计划于5月初开工，6月底完工...</p>
-                <a href="#" class="read-more">阅读全文 →</a>
-            </div>
-
-            <div class="news-item">
-                <h3 class="news-title"><a href="#">关于规范社区公共收益使用的通知</a></h3>
-                <div class="news-meta">
-                    <span class="news-date">2023-04-05</span>
-                    <span class="news-author">发布者：社区管委会</span>
-                </div>
-                <p class="news-summary">为进一步规范社区公共收益的使用和管理，确保资金使用公开透明，社区管委会制定了《社区公共收益使用管理办法》，现予以公布...</p>
-                <a href="#" class="read-more">阅读全文 →</a>
-            </div>
-
-            <div class="news-item">
-                <h3 class="news-title"><a href="#">社区公共收益管理系统上线公告</a></h3>
-                <div class="news-meta">
-                    <span class="news-date">2023-03-28</span>
-                    <span class="news-author">发布者：系统管理员</span>
-                </div>
-                <p class="news-summary">为提高社区公共收益管理的透明度和效率，社区公共收益管理系统正式上线。居民可通过系统查看收益明细、项目申报进度和公示公告等信息...</p>
-                <a href="#" class="read-more">阅读全文 →</a>
-            </div>
-
-            <div class="news-item">
-                <h3 class="news-title"><a href="#">2022年度社区公共收益使用情况报告</a></h3>
-                <div class="news-meta">
-                    <span class="news-date">2023-03-15</span>
-                    <span class="news-author">发布者：社区管委会</span>
-                </div>
-                <p class="news-summary">2022年度社区公共收益总收入为98.7万元，主要支出包括公共区域维护、社区文化活动、困难家庭帮扶和公共设施添置等。详细报告已公示...</p>
-                <a href="#" class="read-more">阅读全文 →</a>
-            </div>
+            {% else %}
+                <p>暂无新闻数据。</p>
+            {% endfor %}
         </div>
 
         <div class="news-sidebar">
             <div class="sidebar-box">
                 <h3 class="sidebar-title">维护通知</h3>
                 <ul class="hot-news-list">
-                    <li class="hot-news-item">
-                        <a href="#">电梯定期维护通知 (5月15日-16日)</a>
-                        <span class="notice-date">2023-05-10</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">供水系统检修通知 (5月20日)</a>
-                        <span class="notice-date">2023-05-08</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">社区网络设备升级维护</a>
-                        <span class="notice-date">2023-05-05</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">停车场监控系统维护</a>
-                        <span class="notice-date">2023-05-03</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">公共区域照明系统检修</a>
-                        <span class="notice-date">2023-05-01</span>
-                    </li>
+                    {% for item in notices %}
+                        <li class="hot-news-item">
+                            <a href="{{ url_for('detail', item_id=item.id) }}">{{ item.title }}</a>
+                            <span class="notice-date">{{ item.publish_date.strftime('%Y-%m-%d') }}</span>
+                        </li>
+                    {% else %}
+                        <li class="hot-news-item">暂无维护通知</li>
+                    {% endfor %}
                 </ul>
             </div>
 
             <div class="sidebar-box">
                 <h3 class="sidebar-title">维修记录</h3>
                 <ul class="hot-news-list">
-                    <li class="hot-news-item">
-                        <a href="#">3号楼电梯故障已修复</a>
-                        <span class="record-status completed">已完成</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">儿童游乐场设施维修</a>
-                        <span class="record-status completed">已完成</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">地下车库照明维修</a>
-                        <span class="record-status in-progress">进行中</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">小区大门门禁系统维修</a>
-                        <span class="record-status completed">已完成</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">健身器材维护记录</a>
-                        <span class="record-status completed">已完成</span>
-                    </li>
+                    {% for record in records %}
+                        <li class="hot-news-item">
+                            <a href="{{ url_for('maintenance_detail', record_id=record.id) }}">{{ record.title }}</a>
+
+                            {% if record.status == 'completed' %}
+                                <span class="record-status completed">已完成</span>
+                            {% else %}
+                                <span class="record-status in-progress">进行中</span>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li class="hot-news-item">暂无维修记录</li>
+                    {% endfor %}
                 </ul>
             </div>
 
             <div class="sidebar-box">
                 <h3 class="sidebar-title">安全提醒</h3>
                 <ul class="hot-news-list">
-                    <li class="hot-news-item"><a href="#">夏季用电安全注意事项</a></li>
-                    <li class="hot-news-item"><a href="#">台风季节防范措施提醒</a></li>
-                    <li class="hot-news-item"><a href="#">防火防盗安全提示</a></li>
-                    <li class="hot-news-item"><a href="#">儿童暑期安全注意事项</a></li>
-                    <li class="hot-news-item"><a href="#">电动车充电安全规范</a></li>
+                    {% for item in safeties %}
+                        <li class="hot-news-item">
+                            <a href="{{ url_for('detail', item_id=item.id) }}">{{ item.title }}</a>
+                            <span class="notice-date">{{ item.publish_date.strftime('%Y-%m-%d') }}</span>
+                        </li>
+                    {% else %}
+                        <li class="hot-news-item">暂无安全提醒</li>
+                    {% endfor %}
                 </ul>
             </div>
 
-            <div class="sidebar-box">
-                <h3 class="sidebar-title">维修人员安排</h3>
-                <ul class="hot-news-list">
-                    <li class="hot-news-item">
-                        <a href="#">5月份维修人员值班表</a>
-                        <span class="arrangement-date">2023-05-01</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">端午节期间维修服务安排</a>
-                        <span class="arrangement-date">2023-06-20</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">夏季高温期间工作安排</a>
-                        <span class="arrangement-date">2023-07-01</span>
-                    </li>
-                    <li class="hot-news-item">
-                        <a href="#">夜间紧急维修联系方式</a>
-                        <span class="arrangement-date">2023-05-15</span>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
 
     <ul class="pagination">
-        <li><a href="#" class="active">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">下一页</a></li>
+        {# --- 上一页按钮 --- #}
+        {% if pagination.has_prev %}
+            <li><a href="{{ url_for('news', page=pagination.prev_num) }}">« 上一页</a></li>
+        {% else %}
+            <li><a class="disabled" style="background-color: #eee; cursor: not-allowed; color: #999;">« 上一页</a></li>
+        {% endif %}
+
+        {# --- 页码循环 --- #}
+        {# iter_pages 生成页码逻辑，None 代表省略号 ... #}
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if page_num %}
+                {% if page_num != pagination.page %}
+                    <li><a href="{{ url_for('news', page=page_num) }}">{{ page_num }}</a></li>
+                {% else %}
+                    {# 当前页 #}
+                    <li><a href="#" class="active">{{ page_num }}</a></li>
+                {% endif %}
+            {% else %}
+                {# 省略号 #}
+                <li><span style="display: block; padding: 8px 15px; color: #333;">...</span></li>
+            {% endif %}
+        {% endfor %}
+
+        {# --- 下一页按钮 --- #}
+        {% if pagination.has_next %}
+            <li><a href="{{ url_for('news', page=pagination.next_num) }}">下一页 »</a></li>
+        {% else %}
+            <li><a class="disabled" style="background-color: #eee; cursor: not-allowed; color: #999;">下一页 »</a></li>
+        {% endif %}
     </ul>
 {% endblock %}

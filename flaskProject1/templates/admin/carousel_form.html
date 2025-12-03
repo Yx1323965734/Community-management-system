@@ -1,0 +1,39 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ '编辑' if item else '新增' }}轮播图{% endblock %}
+{% block content %}
+<div class="page-title">
+    <h2>{{ '编辑' if item else '新增' }}轮播图</h2>
+</div>
+<div class="pub-box" style="background:white; padding:30px; border-radius:8px; max-width:600px;">
+    <form method="post">
+        <div class="form-group" style="margin-bottom:20px;">
+            <label>图片链接 (URL):</label>
+            <input type="text" name="image_url" value="{{ item.image_url if item else '' }}" required placeholder="请输入图片地址，例如 https://..."
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
+            <small style="color:#666;">* 暂时支持网络图片链接，或者放在 static 目录下的路径</small>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+            <label>标题 (可选):</label>
+            <input type="text" name="title" value="{{ item.title if item else '' }}"
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+            <label>跳转链接 (可选):</label>
+            <input type="text" name="target_link" value="{{ item.target_link if item else '' }}" placeholder="点击图片后跳转的地址"
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+            <label>排序优先级 (数字越大越靠前):</label>
+            <input type="number" name="priority" value="{{ item.priority if item else 0 }}"
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+            <label>
+                <input type="checkbox" name="is_active" {% if not item or item.is_active %}checked{% endif %}>
+                立即启用显示
+            </label>
+        </div>
+        <button type="submit" style="background:#1e5799; color:white; padding:10px 30px; border:none; border-radius:4px; cursor:pointer;">保存</button>
+    </form>
+</div>
+{% endblock %}

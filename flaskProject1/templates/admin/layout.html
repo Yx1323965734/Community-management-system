@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}管理后台{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* 后台专用布局样式 */
+        body { margin: 0; padding: 0; background-color: #f0f2f5; height: 100vh; display: flex; flex-direction: column; }
+
+        /* 顶部栏 */
+        .admin-topbar {
+            height: 60px;
+            background: #1e5799;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .admin-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden; /* 防止双滚动条 */
+        }
+
+        /* 左侧侧边栏 */
+        .admin-sidebar {
+            width: 240px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-menu li { border-bottom: 1px solid #34495e; }
+
+        /* 菜单标题 */
+        .menu-header {
+            padding: 15px 20px 5px 20px;
+            font-size: 12px;
+            color: #95a5a6;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 15px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #34495e;
+            color: white;
+            border-left-color: #3498db;
+        }
+
+        /* 右侧内容区 */
+        .admin-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* 简单的图标占位 */
+        .icon { width: 20px; display: inline-block; text-align: center; margin-right: 8px; }
+    </style>
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+    <div class="admin-topbar">
+        <div class="logo">🛠️ 社区管理后台</div>
+        <div class="user-info">
+            管理员：{{ session.get('username') }} |
+            <a href="/" target="_blank" style="color:white; margin-left:10px;">预览前台</a> |
+            <a href="{{ url_for('auth.logout') }}" style="color:#ffccc7; margin-left:10px;">退出</a>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <div class="admin-sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                    <span class="icon">📊</span> 综合概览
+                </a></li>
+
+                <div class="menu-header">信息管理</div>
+                <li><a href="{{ url_for('admin.manage_news') }}" class="{% if 'news' in request.path %}active{% endif %}">
+                    <span class="icon">📰</span> 新闻动态
+                </a></li>
+                <li><a href="{{ url_for('admin.manage_notices') }}" class="{% if 'notice' in request.path %}active{% endif %}">
+                    <span class="icon">📢</span> 维护通知
+                </a></li>
+                <li><a href="{{ url_for('admin.manage_safety') }}" class="{% if 'safety' in request.path %}active{% endif %}">
+                    <span class="icon">🛡️</span> 安全提醒
+                </a></li>
+                <li><a href="{{ url_for('admin.manage_revenue') }}" class="{% if 'revenue' in request.path %}active{% endif %}">
+                    <span class="icon">💰</span> 收益公示 <span style="font-size:10px; color:yellow;">(核心)</span>
+                </a></li>
+
+                <div class="menu-header">工程维修</div>
+                <li><a href="{{ url_for('admin.manage_maintenance') }}" class="{% if 'maintenance' in request.path %}active{% endif %}">
+                    <span class="icon">🔧</span> 维修记录管理
+                </a></li>
+
+                <div class="menu-header">系统设置</div>
+                <li><a href="{{ url_for('admin.manage_carousel') }}" class="{% if 'carousel' in request.path %}active{% endif %}">
+                    <span class="icon">🖼️</span> 轮播图管理
+                </a></li>
+                <li><a href="#" onclick="alert('建议后续完善 User 表管理功能'); return false;">
+                    <span class="icon">👤</span> 管理员管理
+                </a></li>
+            </ul>
+        </div>
+
+        <div class="admin-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div style="padding: 10px; margin-bottom: 15px; border-radius: 4px;
+                                    background: {% if category=='success' %}#d4edda{% else %}#f8d7da{% endif %};
+                                    color: {% if category=='success' %}#155724{% else %}#721c24{% endif %};">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% extends "admin/layout.html" %}
+{% block title %}轮播图管理{% endblock %}
+{% block content %}
+<div class="page-title">
+    <h2>轮播图管理</h2>
+    <a href="{{ url_for('admin.carousel_add') }}" style="background:#28a745; color:white; padding:8px 15px; border-radius:4px; text-decoration:none;">+ 新增轮播图</a>
+</div>
+
+<table class="admin-table" style="width:100%; border-collapse:collapse; background:white;">
+    <thead>
+        <tr style="background:#f8f9fa;">
+            <th style="padding:10px; border:1px solid #ddd;">缩略图</th>
+            <th style="padding:10px; border:1px solid #ddd;">标题</th>
+            <th style="padding:10px; border:1px solid #ddd;">优先级</th>
+            <th style="padding:10px; border:1px solid #ddd;">状态</th>
+            <th style="padding:10px; border:1px solid #ddd;">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in carousels %}
+        <tr>
+            <td style="padding:10px; border:1px solid #ddd; text-align:center;">
+                <img src="{{ item.image_url }}" alt="缩略图" style="height:50px; object-fit:cover; border-radius:4px;">
+            </td>
+            <td style="padding:10px; border:1px solid #ddd;">{{ item.title or '-' }}</td>
+            <td style="padding:10px; border:1px solid #ddd;">{{ item.priority }}</td>
+            <td style="padding:10px; border:1px solid #ddd;">
+                {% if item.is_active %}
+                    <span style="color:green; font-weight:bold;">显示</span>
+                {% else %}
+                    <span style="color:#999;">隐藏</span>
+                {% endif %}
+            </td>
+            <td style="padding:10px; border:1px solid #ddd;">
+                <a href="{{ url_for('admin.carousel_edit', id=item.id) }}" style="color:#e67e22;">编辑</a>
+                <a href="{{ url_for('admin.carousel_delete', id=item.id) }}" onclick="return confirm('确定删除？')" style="color:red; margin-left:10px;">删除</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="padding:20px; text-align:center;">暂无轮播图</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
